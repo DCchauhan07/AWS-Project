@@ -1,0 +1,34 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# Terraform plan files
+*.tfplan
+tfplan
+
+# Variables / secrets
+*.tfvars
+*.tfvars.json
+
+# Zip / binaries / temp
+*.zip
+*.tar
+*.gz
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python / misc
+__pycache__/
