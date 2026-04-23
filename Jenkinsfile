@@ -5,6 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1'
         TF_IN_AUTOMATION   = 'true'
         TERRAFORM_BIN      = '/usr/bin/terraform'
+	TF_PLUGIN_TIMEOUT  = '120s'
     }
 
     stages {
