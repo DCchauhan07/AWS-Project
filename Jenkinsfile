@@ -4,6 +4,7 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         TF_IN_AUTOMATION   = 'true'
+        TERRAFORM_BIN      = '/usr/bin/terraform'
     }
 
     stages {
@@ -24,10 +25,20 @@ pipeline {
             }
         }
 
+        stage('Debug Environment') {
+            steps {
+                sh 'whoami'
+                sh 'pwd'
+                sh 'ls -la'
+                sh 'ls -la terraform || true'
+                sh '$TERRAFORM_BIN version'
+            }
+        }
+
         stage('Terraform Format Check') {
             steps {
                 dir('terraform') {
-                    sh 'terraform fmt -check'
+                    sh '$TERRAFORM_BIN fmt -check'
                 }
             }
         }
@@ -35,7 +46,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
+                    sh '$TERRAFORM_BIN init'
                 }
             }
         }
@@ -43,7 +54,7 @@ pipeline {
         stage('Terraform Validate') {
             steps {
                 dir('terraform') {
-                    sh 'terraform validate'
+                    sh '$TERRAFORM_BIN validate'
                 }
             }
         }
@@ -51,7 +62,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan -out=tfplan'
+                    sh '$TERRAFORM_BIN plan -out=tfplan'
                 }
             }
         }
@@ -60,7 +71,7 @@ pipeline {
             steps {
                 input message: 'Approve Terraform apply?'
                 dir('terraform') {
-                    sh 'terraform apply -auto-approve tfplan'
+                    sh '$TERRAFORM_BIN apply -auto-approve tfplan'
                 }
             }
         }
@@ -84,6 +95,9 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed.'
+        }
+        always {
+            cleanWs()
         }
     }
 }
